@@ -11,13 +11,17 @@ import {
   HiArrowDownOnSquare,
   HiArrowUpOnSquare,
   HiEye,
+  HiPencil,
   HiTrash,
 } from "react-icons/hi2";
 import { useNavigate } from "react-router-dom";
 import useCheckout from "../check-in-out/useCheckout";
 import useDeleteBooking from "./useDeleteBooking";
 import Modal from "../../ui/Modal";
+
 import ConfirmDelete from "../../ui/ConfirmDelete";
+import EditBooking from "./EditBooking";
+
 
 const Cabin = styled.div`
   font-size: 1.6rem;
@@ -46,8 +50,8 @@ const Amount = styled.div`
   font-weight: 500;
 `;
 
-function BookingRow({
-  booking: {
+function BookingRow({booking}) {
+  const {  
     id: bookingId,
     // created_at,
     startDate,
@@ -58,8 +62,8 @@ function BookingRow({
     status,
     guests: { fullName: guestName, email },
     cabins: { name: cabinName },
-  },
-}) {
+  
+  } = booking;
   const navigate = useNavigate();
   const { checkout, isCheckingOut } = useCheckout();
   const { deleteBooking, isDeleting } = useDeleteBooking();
@@ -123,6 +127,14 @@ function BookingRow({
                 check out
               </Menus.Button>
             )}
+            <Modal.Open opens='edit-booking'>
+              <Menus.Button
+                icon={<HiPencil />}>
+                Edit
+              </Menus.Button>
+            </Modal.Open>
+            
+            
               <Modal.Open opens="delete-booking">
          <Menus.Button
               icon={<HiTrash />}
@@ -132,6 +144,10 @@ function BookingRow({
         </Modal.Open>
           </Menus.List>
         </Menus.Menu>
+        <Modal.Window name="edit-booking">
+          {/* EditBooking component would go here */}
+          <EditBooking booking={booking} />
+        </Modal.Window>
       
           <Modal.Window name="delete-booking">
             <ConfirmDelete

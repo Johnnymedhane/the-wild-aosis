@@ -26,8 +26,12 @@ A modern hotel management application for managing bookings, cabins, guests, and
 - **Recharts** for data visualization
 - **date-fns** for date manipulation
 
+## Testing Credentials
 
+Use the following credentials to log in and test the application:
 
+- **Email:** tacip78584@gopicta.com
+- **Password:** test0987
 
 ## License
 

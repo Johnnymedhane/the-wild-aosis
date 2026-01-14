@@ -7,6 +7,8 @@ import useCabins from "../cabins/useCabins";
 import SalesChart from "./SalesChart";
 import DurationChart from "./DurationChart";
 import TodayActivity from "../check-in-out/TodayActivity";
+import { useEffect } from "react";
+import { uploadAll } from "../../data/Uploader";
 
 const StyledDashboardLayout = styled.div`
   display: grid;
@@ -18,6 +20,12 @@ const StyledDashboardLayout = styled.div`
 function DashboardLayout() {
   const { isLoading: isLoading1, bookings } = useRecentBookings();
 
+    useEffect(function(){
+    uploadAll();
+    console.log("Uploading bookings...");
+  },[])
+  
+  
   const {
     isLoading: isLoading2,
     confirmedStays,

@@ -46,7 +46,7 @@ async function createBookings() {
     .from("guests")
     .select("id")
     .order("id");
-  const allGuestIds = guestsIds.map((cabin) => cabin.id);
+  const allGuestIds = guestsIds.map((guest) => guest.id);
   const { data: cabinsIds } = await supabase
     .from("cabins")
     .select("id")
@@ -94,34 +94,41 @@ async function createBookings() {
     };
   });
 
-  console.log(finalBookings);
+  // console.log(finalBookings);
 
   const { error } = await supabase.from("bookings").insert(finalBookings);
   if (error) console.log(error.message);
 }
 
- function Uploader() {
+export async function uploadAll() {
+  // Bookings need to be deleted FIRST
+  await deleteBookings();
+  await deleteGuests();
+  await deleteCabins();
+
+  // Bookings need to be created LAST
+  await createGuests();
+  await createCabins();
+  await createBookings();
+}
+
+export async function uploadBookings() {
+  await deleteBookings();
+  await createBookings();
+}
+
+function Uploader() {
   const [isLoading, setIsLoading] = useState(false);
 
-  async function uploadAll() {
+  async function handleUploadAll() {
     setIsLoading(true);
-    // Bookings need to be deleted FIRST
-    await deleteBookings();
-    await deleteGuests();
-    await deleteCabins();
-
-    // Bookings need to be created LAST
-    await createGuests();
-    await createCabins();
-    await createBookings();
-
+    await uploadAll();
     setIsLoading(false);
   }
 
-  async function uploadBookings() {
+  async function handleUploadBookings() {
     setIsLoading(true);
-    await deleteBookings();
-    await createBookings();
+    await uploadBookings();
     setIsLoading(false);
   }
 
@@ -140,11 +147,11 @@ async function createBookings() {
     >
       <h3>SAMPLE DATA</h3>
 
-      <Button onClick={uploadAll} disabled={isLoading}>
+      <Button onClick={handleUploadAll} disabled={isLoading}>
         Upload ALL
       </Button>
 
-      <Button onClick={uploadBookings} disabled={isLoading}>
+      <Button onClick={handleUploadBookings} disabled={isLoading}>
         Upload bookings ONLY
       </Button>
     </div>

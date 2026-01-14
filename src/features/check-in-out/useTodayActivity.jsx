@@ -11,6 +11,6 @@ export function useTodayActivity() {
   
   
 }) 
-  console.log(activities);
+ 
   return {activities, isLoading};
 }
